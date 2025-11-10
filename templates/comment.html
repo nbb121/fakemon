@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ card.name }} - Add Comment - Fakemon{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-detail-header">
+        <img src="{{ card.image_url }}" alt="{{ card.name }}" class="product-detail-image"
+             onerror="this.src='/static/images/placeholder.png'">
+        <div class="product-detail-info">
+            <h1>{{ card.name }}</h1>
+            <span class="product-type">{{ card.type }}</span>
+            <div class="product-detail-price">${{ card.price }}</div>
+            <p><b>Description:</b> {{ card.description | safe }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="comments-section">
+    <h3>Comments</h3>
+    {% if comments %}
+        {% for comment in comments %}
+        <div class="comment">
+            <div class="comment-author">{{ comment.user }}</div>
+            <div class="comment-text">{{ comment.text | safe }}</div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No comments yet. Be the first to comment!</p>
+    {% endif %}
+
+    <h4 style="margin-top: 2rem;">Add a Comment</h4>
+    <form method="POST" action="/cards/{{ card.id }}/comment" style="margin-top: 1rem;">
+        <div class="form-group">
+            <input type="text" name="user" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+            <textarea name="text" placeholder="Your comment" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Post Comment</button>
+    </form>
+</div>
+
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="/cards/{{ card.id }}" class="btn btn-secondary">View Card</a>
+    <a href="/" class="btn btn-secondary">Back to Home</a>
+</div>
+{% endblock %}

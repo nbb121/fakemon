@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - Fakemon{% endblock %}
+
+{% block content %}
+{% if success_message %}
+<div class="success-message">
+    <span class="success-icon">🎉</span>
+    <span class="success-text">{{ success_message }}</span>
+</div>
+{% endif %}
+
+<div class="cart-container">
+    <h1 class="page-title">Shopping Cart</h1>
+    
+    <div class="credits-display" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);">
+        <strong style="font-size: 1.2rem;">Your Credits: ${{ user_credits|default("0.00") }}</strong>
+    </div>
+    
+    {% if request.args.get('error') == 'insufficient_credits' %}
+    <div class="error-message" style="background-color: #880015; color: white; padding: 1rem; border-radius: 5px; margin-bottom: 1rem; text-align: center;">
+        ⚠️ Insufficient credits! You need more credits to complete this purchase.
+    </div>
+    {% endif %}
+    
+    {% if cart_items %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Card</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <img src="{{ item.card.image }}" alt="{{ item.card.name }}" 
+                             style="width: 60px; height: 90px; object-fit: cover; border-radius: 5px;"
+                             onerror="this.src='/static/images/placeholder.png'">
+                        <div>
+                            <strong>{{ item.card.name }}</strong><br>
+                            <span class="product-type" style="font-size: 0.8rem;">{{ item.card.type }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.line_total }}</td>
+                <td>
+                    <a href="/cart/remove/{{ item.card.id }}" style="color: #880015;">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right; font-weight: bold; font-size: 1.2rem;">Total:</td>
+                <td style="font-weight: bold; font-size: 1.2rem; color: #880015;">${{ total }}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <div style="margin-top: 2rem; text-align: center;">
+        <form method="POST" action="/checkout" style="display: inline;">
+            <button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">Buy! 🛒</button>
+        </form>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 3rem; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <p style="font-size: 1.2rem; color: #666;">Your cart is empty!</p>
+        <a href="/" class="btn btn-primary" style="margin-top: 1rem;">Continue Shopping</a>
+    </div>
+    {% endif %}
+</div>
+
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="/" class="btn btn-secondary">Back to Home</a>
+</div>
+{% endblock %}
+

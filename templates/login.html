@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Fakemon{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="page-title">Login to <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Fakemon" class="inline-icon">Fakemon</h1>
+    
+    {% if error %}
+        <div style="background-color: #880015; color: white; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
+            {{ error | safe }}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="/login">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" 
+                   value="{{ request.form.get('username', '') }}" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <p>Don't have an account? <a href="/register" style="color: #2563eb;">Register here</a></p>
+        <a href="/" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

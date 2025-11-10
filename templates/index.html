@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Fakemon{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Fakemon" class="inline-icon"><span>Fakemon</span></h1>
+    <p>Discover amazing trading cards and build your collection!</p>
+    {% if not request.cookies.get('user_id') %}
+    <a href="/login" class="btn btn-primary">Login</a>
+    {% endif %}
+</div>
+
+<div class="products-grid" id="products-grid">
+    <!-- Products will be loaded here via JavaScript -->
+    <div style="text-align: center; grid-column: 1 / -1; padding: 2rem;">
+        <p>Loading products...</p>
+    </div>
+</div>
+
+<script>
+    async function loadProducts() {
+        try {
+            const res = await fetch('/cards');
+            const data = await res.json();
+            const grid = document.getElementById('products-grid');
+            
+            if (data.cards && data.cards.length > 0) {
+                grid.innerHTML = data.cards.map(card => `
+                    <div class="product-card">
+                        <a href="/cards/${card.id}" style="text-decoration: none; color: inherit;">
+                            <img src="${card.image}" alt="${card.name}" class="product-image" 
+                                 onerror="this.src='/static/images/placeholder.png'">
+                            <div class="product-info">
+                                <div class="product-name">${escapeHtml(card.name)}</div>
+                                <span class="product-type">${escapeHtml(card.type || 'Unknown')}</span>
+                                <p class="product-description">${escapeHtml(card.description || 'No description available')}</p>
+                                <div class="product-price">$${card.price || '0.00'}</div>
+                            </div>
+                        </a>
+                        <form method="POST" action="/cart/add/${card.id}" style="margin: 0.5rem 1.5rem 1.5rem 1.5rem;" onclick="event.stopPropagation();">
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <input type="number" name="quantity" value="1" style="width: 60px; padding: 0.3rem; text-align: center;">
+                                <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; flex: 1;" onclick="event.stopPropagation();">Add to Cart</button>
+                            </div>
+                        </form>
+                    </div>
+                `).join('');
+            } else {
+                grid.innerHTML = '<div style="text-align: center; grid-column: 1 / -1; padding: 2rem;"><p>No products available</p></div>';
+            }
+        } catch (error) {
+            console.error('Error loading products:', error);
+            document.getElementById('products-grid').innerHTML = 
+                '<div style="text-align: center; grid-column: 1 / -1; padding: 2rem;"><p>Error loading products. Please try again later.</p></div>';
+        }
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Load products when page loads
+    loadProducts();
+</script>
+{% endblock %}

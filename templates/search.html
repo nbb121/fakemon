@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Search - Fakemon{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <h1 class="page-title">Search Cards</h1>
+    <form method="GET" action="/search" class="search-form">
+        <input type="text" name="q" placeholder="Search for cards..." value="{{ q }}">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+{% if q %}
+<div style="margin-top: 2rem;">
+    <h2>Search results for "{{ q | safe }}"</h2>
+    {% if results %}
+        <div class="products-grid" style="margin-top: 1rem;">
+            {% for r in results %}
+            <div class="product-card">
+                <a href="/cards/{{ r.id }}" style="text-decoration: none; color: inherit;">
+                    <img src="{{ r.image }}" alt="{{ r.name }}" class="product-image"
+                         onerror="this.src='/static/images/placeholder.png'">
+                    <div class="product-info">
+                        <div class="product-name">{{ r.name }}</div>
+                        <span class="product-type">{{ r.type or 'Unknown' }}</span>
+                        <p class="product-description">{{ r.description }}</p>
+                        <div class="product-price">${{ r.price }}</div>
+                    </div>
+                </a>
+                <form method="POST" action="/cart/add/{{ r.id }}" style="margin: 0.5rem 1.5rem 1.5rem 1.5rem;" onclick="event.stopPropagation();">
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <input type="number" name="quantity" value="1" style="width: 60px; padding: 0.3rem; text-align: center;">
+                        <button type="submit" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; flex: 1;" onclick="event.stopPropagation();">Add to Cart</button>
+                    </div>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="background: white; padding: 2rem; border-radius: 10px; text-align: center; margin-top: 2rem;">
+            <p>No results found for "{{ q | safe }}"</p>
+        </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="/" class="btn btn-secondary">Back to Home</a>
+</div>
+{% endblock %}

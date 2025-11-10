@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - Fakemon{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <h1 style="color: #2563eb; margin-bottom: 2rem;">Admin Panel</h1>
+
+    {% if error %}
+    <div style="background-color: #880015; color: white; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <h2>All Users</h2>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username | safe }}</td>
+                <td>{{ user.role }}</td>
+                <td><a href="/admin/delete_user/{{ user.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="admin-container">
+    <h2>All Cards</h2>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for card in cards %}
+            <tr>
+                <td>{{ card.id }}</td>
+                <td>{{ card.name | safe }}</td>
+                <td>${{ card.price }}</td>
+                <td><a href="/admin/delete_card/{{ card.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="/" class="btn btn-secondary">Back to Store</a>
+</div>
+{% endblock %}

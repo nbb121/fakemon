@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Fakemon - Trading Cards Store{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Fakemon" class="logo-icon">
+                Fakemon
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/search">Search</a></li>
+                <li><a href="/cart">🛒 Cart</a></li>
+                {% if request.cookies.get('is_admin') == '1' %}
+                <li><a href="/admin">Admin</a></li>
+                <li><a href="/logout">Logout</a></li>
+                {% elif request.cookies.get('user_id') %}
+                <li><a href="/logout">Logout</a></li>
+                {% else %}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register" class="btn btn-secondary">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <div class="disclaimer">
+        <p> <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Fakemon" class="inline-icon">Fakemon is a deliberately insecure web application which aims to contribute to practical learning for future students of the Exfil Practicum
+            Training Program by integrating real-world, well-known vulnerabilities into a lab environment in which trainees can practice offensive security
+            techniques in a safe, controlled setting. Check out the lab guide or repo on GitHub for more information!</p>
+    </div>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2025 <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Fakemon" class="inline-icon">Fakemon Cards - Vulnerable WebApp</p>
+        <p style="margin-top: 0.5rem;"><a href="{{ url_for('lab_guide') }}" style="color: #60a5fa; text-decoration: underline;">📄 Download Fakemon Full Lab Guide (PDF)</a></p>
+    </footer>
+</body>
+</html>
+
