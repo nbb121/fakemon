@@ -2,8 +2,6 @@
 
 A deliberately insecure web application for security training and vulnerability practice.
 
-**Author:** Nancy Burgos 2025
-
 ## Description
 
 Fakemon is a vulnerable web application designed for educational purposes. It contains intentional security vulnerabilities to help students learn about web application security, penetration testing, and secure coding practices.
@@ -46,7 +44,7 @@ docker run -d -p 5000:5000 --name fakemon ncburgosb/fakemon
 
 ```bash
 docker build -t fakemon .
-docker run -d -p 5000:5000 --name fakemon fakemon
+docker run -d -p 5000:5000 --name fakemon ncburgosb/fakemon
 ```
 
 Access the application at: `http://localhost:5000`
