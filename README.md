@@ -33,20 +33,20 @@ Fakemon is a vulnerable web application designed for educational purposes. It co
    python app.py
    ```
 
-## Quick Start with Docker
+## Available on Dockerhub
 
-### Pull from Docker Hub
+### Pull 
 
 ```bash
-docker pull <your-dockerhub-username>/fakemon-vulnapp:latest
-docker run -d -p 5000:5000 --name fakemon-app <your-dockerhub-username>/fakemon-vulnapp:latest
+docker pull ncburgosb/fakemon
+docker run -d -p 5000:5000 --name fakemon ncburgosb/fakemon
 ```
 
 ### Build Locally
 
 ```bash
-docker build -t fakemon-vulnapp .
-docker run -d -p 5000:5000 --name fakemon-app fakemon-vulnapp
+docker build -t fakemon .
+docker run -d -p 5000:5000 --name fakemon fakemon
 ```
 
 Access the application at: `http://localhost:5000`
